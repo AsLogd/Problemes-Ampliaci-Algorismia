@@ -1,3 +1,14 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\author{Gonzalo Solera }
+\date{June 2018}
+
+\begin{document}
+
+
 \section{Problema examen 6}
 \subsection{Enunciat}
 Linear Diophantine equations. Let $a$, $b$, and $c$ be natural numbers. Show that the linear equation
@@ -7,3 +18,51 @@ ax + by = c
 has integer solutions $x$ and $y$ if and only if $gcd(a,b)$ divides $c$, and that it has either zero or infinitely many integer solutions. Then give a polynomial time algorithm that returns a solution $(x,y)$ where the integers $x,y \geq 0$ or reports that no such solution exists.
 
 \subsection{Solució}
+
+
+
+We know from the lecture that the algorithm EXT-EUCLID$(a, b)$ returns $(d, x', y')$ such that gcd$(a, b) = d = ax' + by'$ for any natural number $a$ and $b$. Hence, given $a$ and $b$ from this exercise, we know there exists some integers $x'$ and $y'$ that satisfy the equation:
+
+$$
+ax' + by' = gcd(a, b)
+$$
+
+During the rest of the proof, $d$ will keep being gcd$(a, b)$, and by definition of gcd, we know that $a \mod d = 0$ and that $b \mod d = 0$. Hence, we can express $a$ and $b$ as $a = dp, b = dq$ for some integers $p, q$. \\
+
+$\Longleftarrow$ \\
+
+If gcd$(a, b)$ divides $c$, then $c$ is a multiple of $d$, so it can be expressed as $c = k \cdot d$ for the integer $k = \frac{c}{d}$. Hence, multiplying by $k$ on each side of the previous equation we get:
+$$
+k(ax' + by') = a(kx') + b(ky') = k \cdot gcd(a, b) = c
+$$
+Which means that the solution $x = kx', y = ky'$ satisfies the original equation. Now, we are going to show that since there is such a solution $x, y$, then there are infinitely many: \\
+
+Consider any integer $i$:
+\begin{align*}
+a(x+iq) + b(y-ip) 
+&= ax + aiq + by - bip \\
+&= ax + by + i(aq - bp) \\
+&= ax + by + i(dpq - dqp) \\
+&= ax + by
+\end{align*}
+
+Hence, any pair $x+iq, y-ip$ will be also a solution to the original equation.
+
+$\Longrightarrow$ \\
+
+Proof by contradiction. Suppose that there's some $x, y$ that satisfy the equation and that $c$ is not divisible by gcd$(a, b)$. Then:
+$$
+ax + by \mod d = dpx + dqy \mod d = d(px + qy) \mod d = 0
+$$
+Hence, since $ax + by$ is divisible by $d$, then $c$ needs to be divisible by $d$ because the equation is satisfied, which is a contradiction. \\
+
+A polynomial time algorithm for finding a pair of naturals $x, y$ such that the equation is satisfied would simply compute $(d, x', y') := $ EXT-EUCLID(a, b) in $O(n^3)$ time and check that $c \mod d = 0$ in $O(n^2)$. If it isn't, then it reports that no such solution exists. Otherwise we will compute the solution $x, y$ as described before also in poly time (simply multiplying by $k$). It doesn't need to be positive, so we solve the two inequations:
+\begin{align*}
+x + iq \ge 0 \\
+y - ip \ge 0
+\end{align*}
+We obtain a rational interval for the possible values of $i$ that would make the final solution positive. We just need to find an integer in it (which can be done easily in poly time). If such interval is empty, then we report that no positive solution exists.
+
+
+
+\end{document}
