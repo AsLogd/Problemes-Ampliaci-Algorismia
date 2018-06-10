@@ -10,3 +10,55 @@
 It’s not clear how to generalize the greedy algorithm to EXACT SPANNING TREE. In fact, there is probably no polynomial time algorithm at all, because EXACT SPANNING TREE is NP-complete. Show that EXACT SPANNING TREE is NP-complete
 
 \subsection{Solució}
+
+We will proof that EXACT SPANNING TREE (ETS) is NP-Complete by showing that ETS is in NP and doing a reduction from SUBSET SUM to ETS.
+
+\vspace{5mm}
+\underline{\textbf{ETS is in NP}}
+
+ETS is in NP because given a solution for the problem, we can verify the solution in polynomial time. A solution for ETS is the subset of edges and vertices of in the graph G that form the spanning tree ST. To verify the solution, we have to check the following:
+
+\begin{enumerate}
+	\item ST contains all vertices of G. $O(|V|)$
+	\item ST is a tree. $O(|V|+|E|)$
+	\item $l \le $ sum of edge weights of ST $\le u$. $O(|E|)$
+\end{enumerate}
+
+\vspace{5mm}
+\underline{\textbf{REDUCTION OF SUBSET SUM TO ETS}}
+
+The subset sum problem consists on picking a subset S of elements of an array A of length n $([x_1,...x_n])$ such that the sum of these elements in S equals $k$.
+
+
+We will build a \textit{ladder graph} G that consists of two paths P1 and P2 of $n$ edges, with edges joining vertices $P1_i$ and $P2_i$ for $0 \le i \le n$.
+
+
+
+In one of those paths (for example P2), the weights of this edges will match the elements of A. We assign weigths 0 to the rest of the edges in G.
+
+
+We set the two integers $l$ and $u$ to value $k$. Therefore, we will look for a spanning tree where the sum $W$ of the weights of its edges is exactly $k$.
+
+
+It is possible to build G in polynomial time $O(n)$.
+
+
+We claim that there is a subset in A for which the sum of its elements is k \textbf{if and only if} there is a spanning tree in G for which the sum of the weights of its edges is $k$.
+
+\vspace{5mm}
+\underline{\textbf{Proof of the correctness}}
+
+$\implies$
+
+If there is a subset S whose elements add up to $k$ it is possible to build a spanning tree in G whose edges sum $k$. If $X_i \in S$, the edge in P2 corresponding to $X_i$ will be part of the spanning tree. Otherwise, if $X_i \notin S$, we will select the corresponding edge of P1.
+
+
+Following this method, for each $i$, we will select either the edge $i$ of P1 or the edge $i$ of P2. Then we build a spanning tree by joining the selected edges using the edges between vertices of P1 and P2.
+
+
+If we select the edges corresponding to the elements of S, we will have a spanning tree whose sum of edge weigths will be $k$.
+
+$\impliedby$
+
+If there is a spanning tree in G for which the sum of its edges is $k$, all the edges that contributed to the sum must be in P2 (because other edges weight is 0). As we defined the weights of edges in P2 to match the elements in the array A of the subset problem, this means that there exists a subset of A that sums $k$.
+
